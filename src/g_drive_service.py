@@ -4,8 +4,6 @@ from pydrive2.auth  import GoogleAuth
 
 
 class GoogleDriveService:
-
-    root_folder_id      = '1JJ3W-Qzm7iienwwNgTwR8PN9jWFoHPNA'
     temp_storage_folder = 'temp_file_storage'
     
     def __init__(self):
@@ -18,7 +16,7 @@ class GoogleDriveService:
         self.create_dict_of_section_title_and_keyboards()
     
     def create_dict_of_section_title_and_keyboards(self, folder_id=None):
-        if folder_id == None: folder_id = GoogleDriveService.root_folder_id
+        if folder_id == None: folder_id = Constants.ROOT_FOLDER_ID
         item_list = self.drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
         self.keyboards[folder_id] = item_list
         for item in item_list:
@@ -33,7 +31,6 @@ class GoogleDriveService:
     
     def get_list_of_content_in_section(self, section_name):
         section_id = self.section[section_name]
-        #item_list = self.drive.ListFile({'q': f"'{section_id}' in parents and trashed=false"}).GetList()
         item_list = self.keyboards[section_id]
         return [ section["title"] for section in item_list ]
     
@@ -44,7 +41,7 @@ class GoogleDriveService:
         return path
  
     def get_list_of_root_sections(self):    
-        item_list = self.drive.ListFile({'q': f"'{GoogleDriveService.root_folder_id}' in parents and trashed=false"}).GetList()
+        item_list = self.drive.ListFile({'q': f"'{Constants.ROOT_FOLDER_ID}' in parents and trashed=false"}).GetList()
         return [ section["title"] for section in item_list ]
 
 
